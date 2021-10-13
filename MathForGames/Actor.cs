@@ -18,6 +18,8 @@ namespace MathForGames
         private string _name;
         private Vector2 _position;
         private bool _started;
+        private float _speed;
+        private bool _toBeRemoved;
 
         public bool Started
         {
@@ -35,12 +37,22 @@ namespace MathForGames
             get { return _name; }
         }
 
-        public Actor(char icon, float x, float y, string name = "Actor", ConsoleColor color = ConsoleColor.White):
-            this(icon, new Vector2 { x = x, y = y }, name, color) {}
+        public Icon Icon
+        {
+           get { return _icon; }
+        }
 
-        public Actor(char icon, Vector2 position, string name = "Actor", ConsoleColor color = ConsoleColor.White)
+        public bool ToBeRemoved
+        {
+            get { return _toBeRemoved; }
+        }
+        public Actor(char icon, float x, float y, float speed, string name = "Actor", ConsoleColor color = ConsoleColor.White):
+            this(icon, new Vector2 { x = x, y = y }, speed, name, color) {}
+
+        public Actor(char icon, Vector2 position, float speed, string name = "Actor", ConsoleColor color = ConsoleColor.White)
         {
             _icon = new Icon { Symbol = icon, Color = color };
+            _speed = speed;
             _position = position;
             _name = name;
         }
@@ -52,6 +64,8 @@ namespace MathForGames
 
         public virtual void Update()
         {
+                _position.x += _speed;
+            
         }
 
         public virtual void Draw()
@@ -66,7 +80,10 @@ namespace MathForGames
 
         public virtual void OnCollision(Actor actor)
         {
-
+            if (actor.Icon.Symbol == '|')
+            {
+                _toBeRemoved = true;
+            }
         }
     }
 }

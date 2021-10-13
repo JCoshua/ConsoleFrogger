@@ -9,8 +9,9 @@ namespace MathForGames
         /// <summary>
         /// An Array containing all actors in a scene
         /// </summary>
-        private Actor[] _actors;
-
+        private static Actor[] _actors;
+        private int _timer;
+       
         public Scene()
         {
             _actors = new Actor[0];
@@ -21,6 +22,20 @@ namespace MathForGames
         /// </summary>
         public virtual void Start()
         {
+            Player player = new Player('x', 15, 28, 1, "Player", ConsoleColor.Green);
+            AddActor(player);
+            for (int j = 0; j < 29; j++)
+            {
+                Actor leftWall = new Actor('|', 0, j, 0, "Left Wall");
+                Actor rightWall = new Actor('|', 29, j, 0, "Right Wall");
+                AddActor(leftWall);
+                AddActor(rightWall);
+            }
+            for (int p = 0; p < 30; p++)
+            {
+                Actor finish = new Actor('=', p, 0, 0);
+                AddActor(finish);
+            }
             for (int i = 0; i < _actors.Length; i++)
                 _actors[i].Start();
         }
@@ -42,9 +57,41 @@ namespace MathForGames
                 for (int j = 0; j < _actors.Length; j++)
                         if (_actors[i].Position == _actors[j].Position && i != j)
                             _actors[i].OnCollision(_actors[j]);
-            }
-                
 
+                if (_actors[i].ToBeRemoved)
+                    RemoveActor(_actors[i]);
+            }
+            _timer++;
+            if (_timer >= 6-Engine.Round && Engine.Round <= 5)
+            {
+                int location = new Random().Next(2, 27);
+                int speed = new Random().Next(1, 3);
+                Actor log = new Actor('O', 1, location, speed);
+                AddActor(log);
+                _timer = 0;
+            }
+            else if(_timer > 6-Engine.Round && Engine.Round > 5 && Engine.Round <= 10)
+            {
+                int location = new Random().Next(2, 27);
+                int speed = new Random().Next(1, 3);
+                Actor log1 = new Actor('O', 1, location, speed);
+                Actor log2 = new Actor('O', 2, location, speed);
+                AddActor(log1);
+                AddActor(log2);
+                _timer = 0;
+            }
+            else if (_timer > 6 - Engine.Round && Engine.Round > 10)
+            {
+                int logLenght = new Random().Next(2, 6);
+                int location = new Random().Next(2, 27);
+                int speed = new Random().Next(1, 3);
+                for (int i = 0; i < logLenght; i++)
+                {
+                    Actor log = new Actor('O', i, location, speed);
+                    AddActor(log);
+                }
+                _timer = 0;
+            }
         }
 
         /// <summary>
@@ -85,7 +132,7 @@ namespace MathForGames
         /// </summary>
         /// <param name="actor">The actor to remove</param>
         /// <returns>If the removal was successful</returns>
-        public bool RemoveActor(Actor actor)
+        public static bool RemoveActor(Actor actor)
         {
             //Creates a variable to store if the removal was successful
             bool actorRemoved = false;
@@ -99,7 +146,7 @@ namespace MathForGames
             {
                 if (_actors[i] != actor)
                 {
-                    tempArray[i] = _actors[i];
+                    tempArray[j] = _actors[i];
                     j++;
                 }
                 else

@@ -9,9 +9,30 @@ namespace MathForGames
     class Engine
     {
         private static bool _applicationShouldClose = false;
-        private static int _currentSceneIndex;
+        private static int _currentSceneIndex = 0;
         private Scene[] _scenes = new Scene[0];
         private static Icon[,] _buffer;
+        private static int _round = 1;
+        private static bool _playerWin;
+        private static bool _playerHitLog;
+        private Scene _currentLevel;
+
+        public static int Round
+        {
+            get { return _round; }
+            set { _round = value; }
+        }
+
+        public static bool PlayerWin
+        {
+            get { return _playerWin; }
+            set { _playerWin = value; }
+        }
+        public static bool PlayerHitLog
+        {
+            get { return _playerHitLog; }
+            set { _playerHitLog = value; }
+        }
 
         /// <summary>
         /// Called to begin the application
@@ -40,6 +61,8 @@ namespace MathForGames
         /// </summary>
         private void Start()
         {
+            _currentLevel = new Scene();
+            AddScene(_currentLevel);
             _scenes[_currentSceneIndex].Start();
         }
 
@@ -48,7 +71,17 @@ namespace MathForGames
         /// </summary>
         private void Update()
         {
+            if (PlayerWin)
+                CreateNewScene();
+            if (PlayerHitLog)
+                RestartScreen();
+            if(Round <= 20)
             _scenes[_currentSceneIndex].Update();
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("You Win");
+            }
         }
 
         /// <summary>
@@ -57,8 +90,9 @@ namespace MathForGames
         private void Draw()
         {
             Console.CursorVisible = false;
+            Console.Write("Round: " + Round);
             //Clears the stuff that was on the screen in the last frame
-            _buffer = new Icon[Console.WindowWidth, Console.WindowHeight - 1];
+            _buffer = new Icon[30, 29];
 
             //Resets the cursor poistion to the top to draw over the screen
             Console.SetCursorPosition(0, 0);
@@ -152,6 +186,65 @@ namespace MathForGames
         public static void CloseApplication()
         {
             _applicationShouldClose = true;
+        }
+
+        /// <summary>
+        /// A function to get the input of the player
+        /// </summary>
+        /// <returns>The player's choice</returns>
+        public static int GetInput()
+        {
+            int choice = -1;
+            //Loops while the player does not have a valid input
+            while (choice == -1)
+            {
+                if (!int.TryParse(Console.ReadLine(), out choice))
+                {
+                    Console.WriteLine("Invalid Input");
+                    Console.ReadKey(true);
+                    choice = -1;
+                }
+            }
+            return choice;
+        }
+
+        /// <summary>
+        /// Creates a New Scene if the player clears the Level
+        /// </summary>
+        public void CreateNewScene()
+        {
+            _currentLevel = new Scene();
+            AddScene(_currentLevel);
+            _currentSceneIndex++;
+            _scenes[_currentSceneIndex].Start();
+            Round++;
+            _playerWin = false;
+        }
+
+        /// <summary>
+        /// The Restart Screen
+        /// </summary>
+        public void RestartScreen()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Do you want to play again\n" +
+                "1. Yes\n2. No\n");
+            int input = GetInput();
+            //IF Yes
+            if (input == 1)
+            {
+                //Start a new game
+                _currentLevel = new Scene();
+                Console.Clear();
+                Round = 1;
+                _scenes[_currentSceneIndex].Start();
+                PlayerHitLog = false;
+            }
+            //If no
+            else if (input == 2)
+                //End Game
+                CloseApplication();
         }
     }
 }

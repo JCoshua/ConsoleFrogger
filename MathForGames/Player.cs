@@ -23,7 +23,7 @@ namespace MathForGames
         }
 
         public Player(char icon, float x, float y, float speed, string name = "Actor", ConsoleColor color = ConsoleColor.White)
-            : base(icon, x, y, name, color)
+            : base(icon, x, y, speed, name, color)
         {
             _speed = speed;
         }
@@ -51,6 +51,22 @@ namespace MathForGames
 
         public override void OnCollision(Actor actor)
         {
+            if(actor.Icon.Symbol == 'O')
+            {
+                Engine.PlayerHitLog = true;
+            }
+            else if (actor.Icon.Symbol == '=')
+            {
+                Engine.PlayerWin = true;
+            }
+            if(actor.Name == "Left Wall")
+            {
+                Position += new Vector2 { x = 1, y = 0 };
+            }
+            if (actor.Name == "Right Wall")
+            {
+                Position -= new Vector2 { x = 1, y = 0 };
+            }
         }
     }
 }
