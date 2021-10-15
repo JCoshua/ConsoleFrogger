@@ -74,9 +74,20 @@ namespace MathForGames
             if (PlayerWin)
                 CreateNewScene();
             if (PlayerHitLog)
-                RestartScreen();
+            {
+                if (Player.Lives <= 0)
+                    RestartScreen();
+                _currentLevel = new Scene();
+                Console.Clear();
+                _scenes[_currentSceneIndex].Start();
+                PlayerHitLog = false;
+            }
+                
             if(Round <= 20)
-            _scenes[_currentSceneIndex].Update();
+            {
+                _scenes[_currentSceneIndex].Update();
+                _scenes[_currentSceneIndex].UpdateUI();
+            }
             else
             {
                 Console.Clear();
@@ -90,15 +101,16 @@ namespace MathForGames
         private void Draw()
         {
             Console.CursorVisible = false;
-            Console.Write("Round: " + Round);
+
             //Clears the stuff that was on the screen in the last frame
-            _buffer = new Icon[30, 29];
+            _buffer = new Icon[75, 29];
 
             //Resets the cursor poistion to the top to draw over the screen
             Console.SetCursorPosition(0, 0);
 
             //Adds all actor icons to buffer
             _scenes[_currentSceneIndex].Draw();
+            _scenes[_currentSceneIndex].DrawUI();
 
             //Iterates through buffer
             for (int y = 0; y < _buffer.GetLength(1); y++)
@@ -216,8 +228,8 @@ namespace MathForGames
             _currentLevel = new Scene();
             AddScene(_currentLevel);
             _currentSceneIndex++;
-            _scenes[_currentSceneIndex].Start();
             Round++;
+            _scenes[_currentSceneIndex].Start();
             _playerWin = false;
         }
 
@@ -234,12 +246,10 @@ namespace MathForGames
             //IF Yes
             if (input == 1)
             {
-                //Start a new game
-                _currentLevel = new Scene();
-                Console.Clear();
+                //Return to the first round
+                Player.Lives = 3;
                 Round = 1;
-                _scenes[_currentSceneIndex].Start();
-                PlayerHitLog = false;
+               
             }
             //If no
             else if (input == 2)

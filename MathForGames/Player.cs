@@ -7,14 +7,8 @@ namespace MathForGames
 {
     class Player : Actor
     {
-        private float _speed;
         private Vector2 _velocity;
-
-        public float Speed
-        {
-            get { return _speed; }
-            set { _speed = value; }
-        }
+        private static int _lives = 3;
 
         public Vector2 Velocity
         {
@@ -22,10 +16,16 @@ namespace MathForGames
             set { _velocity = value; }
         }
 
+        public static int Lives
+        {
+            get { return _lives; }
+            set { _lives = value; }
+        }
+
         public Player(char icon, float x, float y, float speed, string name = "Actor", ConsoleColor color = ConsoleColor.White)
             : base(icon, x, y, speed, name, color)
         {
-            _speed = speed;
+            Speed = speed;
         }
 
         public override void Update()
@@ -51,19 +51,15 @@ namespace MathForGames
 
         public override void OnCollision(Actor actor)
         {
-            if(actor.Icon.Symbol == 'O')
-            {
-                Engine.PlayerHitLog = true;
-            }
-            else if (actor.Icon.Symbol == '=')
+            if (actor.Icon.Symbol == '=')
             {
                 Engine.PlayerWin = true;
             }
-            if(actor.Name == "Left Wall")
+            else if(actor.Name == "Left Wall")
             {
                 Position += new Vector2 { x = 1, y = 0 };
             }
-            if (actor.Name == "Right Wall")
+            else if (actor.Name == "Right Wall")
             {
                 Position -= new Vector2 { x = 1, y = 0 };
             }

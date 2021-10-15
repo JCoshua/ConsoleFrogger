@@ -46,6 +46,13 @@ namespace MathForGames
         {
             get { return _toBeRemoved; }
         }
+
+        public float Speed
+        { 
+            get { return _speed; }
+            set { _speed = value; }
+        }
+
         public Actor(char icon, float x, float y, float speed, string name = "Actor", ConsoleColor color = ConsoleColor.White):
             this(icon, new Vector2 { x = x, y = y }, speed, name, color) {}
 
@@ -64,8 +71,11 @@ namespace MathForGames
 
         public virtual void Update()
         {
-                _position.x += _speed;
-            
+            if (Icon.Symbol == '|' || Icon.Symbol == '=')
+            {
+                return;
+            }
+            _position.x++;
         }
 
         public virtual void Draw()
@@ -83,6 +93,11 @@ namespace MathForGames
             if (actor.Icon.Symbol == '|')
             {
                 _toBeRemoved = true;
+            }
+            if (actor.Icon.Symbol == 'x' && this.Icon.Symbol == 'O')
+            {
+                Engine.PlayerHitLog = true;
+                Player.Lives--;
             }
         }
     }
