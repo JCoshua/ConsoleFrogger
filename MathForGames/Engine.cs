@@ -91,6 +91,7 @@ namespace MathForGames
             {
                 Console.Clear();
                 Console.WriteLine("You Win");
+                Console.ReadKey(true);
                 RestartScreen();
             }
         }
