@@ -93,7 +93,7 @@ namespace MathForGames
             //Increase the timer
             _timer++;
             //If the Timer finishes during the first 5 rounds
-            if (_timer >= 5)
+            if (_timer >= 3)
             {
                 //Set the Location of the obstacle
                 int location = new Random().Next(2, 27);
@@ -123,8 +123,8 @@ namespace MathForGames
                 //If the Timer finishes after round 10;
                 else if (Engine.Round > 10)
                 {
-                    int logLenght = new Random().Next(2, 4);
-                    for (int i = 0; i < logLenght; i++)
+                    int logLength = new Random().Next(2, 4);
+                    for (int i = 0; i < logLength; i++)
                     {
                         Actor log = new Actor('O', i + 45, location, speed);
                         AddActor(log);
