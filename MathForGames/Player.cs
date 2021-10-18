@@ -55,6 +55,10 @@ namespace MathForGames
             {
                 Engine.PlayerWin = true;
             }
+            else if (actor.Icon.Symbol == '-')
+            {
+                Position += new Vector2 { x = 0, y = -1 };
+            }
             else if(actor.Name == "Left Wall")
             {
                 Position += new Vector2 { x = 1, y = 0 };

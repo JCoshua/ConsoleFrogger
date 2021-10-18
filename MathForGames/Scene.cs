@@ -51,6 +51,12 @@ namespace MathForGames
                 AddActor(finish);
             }
 
+            for (int p = 44; p < 75; p++)
+            {
+                Actor outOfBounds = new Actor('-', p, 28, 0);
+                AddActor(outOfBounds);
+            }
+
             //Starts all of the actors
             for (int i = 0; i < _actors.Length; i++)
                 _actors[i].Start();
