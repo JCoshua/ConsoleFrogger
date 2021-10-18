@@ -1,6 +1,6 @@
 # How To Play
 
-Use the W,A,S,D to move.
+Use the W,A,S,D to move. This game is meant to be played in windowed mode.
 
 # Objective
 
