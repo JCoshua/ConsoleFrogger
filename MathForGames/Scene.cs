@@ -121,9 +121,9 @@ namespace MathForGames
                     AddActor(log2);
                 }
                 //If the Timer finishes after round 10;
-                else if (_timer >= 5 && Engine.Round > 10)
+                else if (Engine.Round > 10)
                 {
-                    int logLenght = new Random().Next(2, 6);
+                    int logLenght = new Random().Next(2, 4);
                     for (int i = 0; i < logLenght; i++)
                     {
                         Actor log = new Actor('O', i + 45, location, speed);
