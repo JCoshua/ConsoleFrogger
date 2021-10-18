@@ -82,7 +82,6 @@ namespace MathForGames
                 _scenes[_currentSceneIndex].Start();
                 PlayerHitLog = false;
             }
-                
             if(Round <= 20)
             {
                 _scenes[_currentSceneIndex].Update();
@@ -92,6 +91,7 @@ namespace MathForGames
             {
                 Console.Clear();
                 Console.WriteLine("You Win");
+                RestartScreen();
             }
         }
 
